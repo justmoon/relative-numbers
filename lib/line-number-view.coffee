@@ -113,7 +113,8 @@ class LineNumberView
       relative = Math.abs(currentLineNumber - absolute)
       relativeClass = 'relative'
       if @trueNumberCurrentLine and relative == 0
-        relative = currentLineNumber - 1
+        relative = currentLineNumber
+        relative-- if @startAtOne
         relativeClass += ' current-line'
       # Apply offset last thing before rendering
       relative += offset
