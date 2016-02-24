@@ -86,7 +86,15 @@ class LineNumberView
 
   _updateSync: () =>
     totalLines = @editor.getLineCount()
-    currentLineNumber = @editor.getCursorScreenPosition().row
+    hasError = false;
+    try
+      currentLineNumber = @editor.getCursorScreenPosition().row
+    catch
+      # if editor has been destroyed, it will throw error
+      hasError = true;
+
+    if hasError
+      return
 
     # Check if selection ends with newline
     # (The selection ends with new line because of the package vim-mode when
