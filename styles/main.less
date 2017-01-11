@@ -1,7 +1,7 @@
 @import "ui-variables";
 @import "syntax-variables";
 
-atom-text-editor::shadow {
+atom-text-editor.editor {
   .relative.current-line {
     // Add some color to make the current line stand out.
     color: @text-color-info
@@ -20,8 +20,8 @@ atom-text-editor::shadow {
 }
 
 // In insert mode, line numbers should return to normal
-atom-text-editor.vim-mode.insert-mode::shadow,
-atom-text-editor.vim-mode-plus.insert-mode::shadow {
+atom-text-editor.vim-mode.insert-mode.editor,
+atom-text-editor.vim-mode-plus.insert-mode.editor {
   .absolute {
     display: inline
   }
@@ -31,7 +31,7 @@ atom-text-editor.vim-mode-plus.insert-mode::shadow {
 }
 
 // Show absolute config option
-atom-text-editor::shadow .show-absolute {
+atom-text-editor.editor .show-absolute {
   // text-align: left;
   .absolute {
     display: inline;
