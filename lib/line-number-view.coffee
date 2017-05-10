@@ -81,15 +81,17 @@ class LineNumberView
       return
 
     totalLines = @editor.getLineCount()
-    currentLineNumber = if @softWrapsCount then @editor.getCursorScreenPosition().row else @editor.getCursorBufferPosition().row
-
-    # Check if selection ends with newline
-    # (The selection ends with new line because of the package vim-mode when
-    # ctrl+v is pressed in visual mode)
-    if @editor.getSelectedText().match(/\n$/)
-      endOfLineSelected = true
+    if @softWrapsCount
+      currentLineNumber = @editor.getCursorScreenPosition().row
     else
-      currentLineNumber = currentLineNumber + 1
+      selection = @editor.getLastSelection()
+      [startRow, endRow] = selection.getBufferRowRange()
+      if selection.isReversed()
+        currentLineNumber = startRow
+      else
+        currentLineNumber = endRow
+
+    currentLineNumber = currentLineNumber + 1
 
     lineNumberElements = @editorView.rootElement?.querySelectorAll('.line-numbers .line-number')
     offset = if @startAtOne then 1 else 0
@@ -102,18 +104,13 @@ class LineNumberView
       absolute = row + 1
 
       relative = Math.abs(currentLineNumber - absolute)
+
       relativeClass = 'relative'
-
-      if @trueNumberCurrentLine and relative == 0
-        if endOfLineSelected
-          relative = Number(@editor.getCursorBufferPosition().row)
-        else
-          relative = Number(@editor.getCursorBufferPosition().row) + 1
-
+      isCurrentLine = relative is 0
+      relative += offset
+      if isCurrentLine and @trueNumberCurrentLine
         relativeClass += ' current-line'
-      else
-        # Apply offset last thing before rendering
-        relative += offset
+        relative = currentLineNumber
 
       absoluteText = @_spacer(totalLines, absolute) + absolute
       relativeText = @_spacer(totalLines, relative) + relative
