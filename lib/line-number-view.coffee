@@ -18,7 +18,7 @@ class LineNumberView
       name: 'relative-numbers'
     @gutter.view = this
 
-    if @delayedMotion?
+    if @delayedMotion
       @_update = _.debounce(@_update, 200)
 
     try

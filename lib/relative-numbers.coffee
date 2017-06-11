@@ -6,7 +6,7 @@ module.exports =
   config:
     delayedMotion:
       type: 'boolean'
-      default: true
+      default: false
       description: 'Delay the motion to reduce the CPU load.'
     trueNumberCurrentLine:
       type: 'boolean'
