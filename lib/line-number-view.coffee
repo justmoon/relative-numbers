@@ -19,7 +19,8 @@ class LineNumberView
 
     try
       # Preferred: Subscribe to any editor model changes
-      @subscriptions.add @editorView.model.onDidChange(@_update)
+      @subscriptions.add @editorView.model.onDidChange =>
+        setTimeout @_update, 0
     catch
       # Fallback: Subscribe to initialization and editor changes
       @subscriptions.add @editorView.onDidAttach(@_update)
