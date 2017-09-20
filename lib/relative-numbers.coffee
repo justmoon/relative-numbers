@@ -20,11 +20,10 @@ module.exports =
       type: 'boolean'
       default: true
       description: 'Do soft-wrapped lines count? (No in vim-mode-plus, yes in vim-mode)'
-
-  configDefaults:
-    trueNumberCurrentLine: true
-    showAbsoluteNumbers: false
-    startAtOne: false
+    showAbsoluteNumbersInInsertMode:
+      type: 'boolean'
+      default: true
+      description: 'Revert back to absolute numbers while in insert mode. (vim-mode/ vim-mode-plus)'
 
   subscriptions: null
 
