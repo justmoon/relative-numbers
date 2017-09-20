@@ -9,6 +9,7 @@ class LineNumberView
     @showAbsoluteNumbers = atom.config.get('relative-numbers.showAbsoluteNumbers')
     @startAtOne = atom.config.get('relative-numbers.startAtOne')
     @softWrapsCount = atom.config.get('relative-numbers.softWrapsCount')
+    @showAbsoluteNumbersInInsertMode = atom.config.get('relative-numbers.showAbsoluteNumbersInInsertMode')
 
     @lineNumberGutterView = atom.views.getView(@editor.gutterWithName('line-number'))
 
@@ -50,6 +51,11 @@ class LineNumberView
       @softWrapsCount = atom.config.get('relative-numbers.softWrapsCount')
       @_update()
 
+    # Subscribe to when the revert to absolute numbers config option is modified
+    @subscriptions.add atom.config.onDidChange 'relative-numbers.showAbsoluteNumbersInInsertMode', =>
+      @showAbsoluteNumbersInInsertMode = atom.config.get('relative-numbers.showAbsoluteNumbersInInsertMode')
+      @_updateInsertMode()
+
 
     # Dispose the subscriptions when the editor is destroyed.
     @subscriptions.add @editor.onDidDestroy =>
@@ -57,6 +63,7 @@ class LineNumberView
 
     @_update()
     @_updateAbsoluteNumbers()
+    @_updateInsertMode()
 
   destroy: () ->
     @subscriptions.dispose()
@@ -125,6 +132,9 @@ class LineNumberView
   _updateAbsoluteNumbers: ->
     @lineNumberGutterView.classList.toggle('show-absolute', @showAbsoluteNumbers)
 
+  _updateInsertMode: ->
+    @lineNumberGutterView.classList.toggle('show-absolute-insert-mode', @showAbsoluteNumbersInInsertMode)
+
   # Undo changes to DOM
   _undo: () =>
     totalLines = @editor.getLineCount()
@@ -137,3 +147,4 @@ class LineNumberView
         lineNumberElement.innerHTML = "#{absoluteText}<div class=\"icon-right\"></div>"
 
     @lineNumberGutterView.classList.remove('show-absolute')
+    @lineNumberGutterView.classList.remove('show-absolute-insert-mode')
