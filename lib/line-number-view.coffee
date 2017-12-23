@@ -107,9 +107,12 @@ class LineNumberView
       # "|| 0" is used given data-screen-row is undefined for the first row
       row = Number(lineNumberElement.getAttribute(counting_attribute)) || 0
 
-      absolute = row + 1
+      absolute_number_for_relative = row + 1
 
-      relative = Math.abs(currentLineNumber - absolute)
+      absolute = Number(lineNumberElement.getAttribute('data-buffer-row')) || 0
+      absolute += 1
+
+      relative = Math.abs(currentLineNumber - absolute_number_for_relative)
       relativeClass = 'relative'
 
       if @trueNumberCurrentLine and relative == 0
