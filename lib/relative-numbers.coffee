@@ -7,15 +7,15 @@ module.exports =
     trueNumberCurrentLine:
       type: 'boolean'
       default: true
-      description: 'Show the true number on the current line'
+      description: 'Show the absolute line number on the current line'
     showAbsoluteNumbers:
       type: 'boolean'
       default: false
-      description: 'Show absolute line numbers too?'
+      description: 'Show both absolute and relative line numbers at all times'
     startAtOne:
       type: 'boolean'
       default: false
-      description: 'Start relative line numbering at one'
+      description: 'Start relative line numbering at one instead of zero for the current line'
     softWrapsCount:
       type: 'boolean'
       default: true
@@ -23,7 +23,7 @@ module.exports =
     showAbsoluteNumbersInInsertMode:
       type: 'boolean'
       default: true
-      description: 'Revert back to absolute numbers while in insert mode. (vim-mode/ vim-mode-plus)'
+      description: 'Revert back to absolute numbers while in insert mode (vim-mode/vim-mode-plus)'
 
   subscriptions: null
 
