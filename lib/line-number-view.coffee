@@ -1,12 +1,12 @@
 {CompositeDisposable} = require 'atom'
-_  = require 'lodash'
+{debounce}  = require 'lodash'
 
 module.exports =
 class LineNumberView
   constructor: (@editor) ->
     @subscriptions = new CompositeDisposable()
     @editorView = atom.views.getView(@editor)
-    @delayedMotion = atom.config.get('relative-numbers.delayedMotion')
+    @debounceMotion = atom.config.get('relative-numbers.debounceMotion')
     @trueNumberCurrentLine = atom.config.get('relative-numbers.trueNumberCurrentLine')
     @showAbsoluteNumbers = atom.config.get('relative-numbers.showAbsoluteNumbers')
     @startAtOne = atom.config.get('relative-numbers.startAtOne')
@@ -19,8 +19,7 @@ class LineNumberView
       name: 'relative-numbers'
     @gutter.view = this
 
-    if @delayedMotion
-      @_update = _.debounce(@_update, 200)
+    @_updateDebounce()
 
     try
       # Preferred: Subscribe to any editor model changes
@@ -36,6 +35,11 @@ class LineNumberView
 
     # Update when scrolling
     @subscriptions.add @editorView.onDidChangeScrollTop(@_update)
+
+    # Subscribe to when the revert to absolute numbers config option is modified
+    @subscriptions.add atom.config.onDidChange 'relative-numbers.debounceMotion', =>
+      @debounceMotion = atom.config.get('relative-numbers.debounceMotion')
+      @_updateDebounce()
 
     # Subscribe to when the true number on current line config is modified.
     @subscriptions.add atom.config.onDidChange 'relative-numbers.trueNumberCurrentLine', =>
@@ -80,8 +84,11 @@ class LineNumberView
     width = Math.max(0, totalLines.toString().length - currentIndex.toString().length)
     Array(width + 1).join '&nbsp;'
 
-  # Update the line numbers on the editor
   _update: () =>
+    @debouncedUpdate()
+
+  # Update the line numbers on the editor
+  _handleUpdate: () =>
     # If the gutter is updated asynchronously, we need to do the same thing
     # otherwise our changes will just get reverted back.
     if @editorView.isUpdatedSynchronously()
@@ -140,6 +147,12 @@ class LineNumberView
 
   _updateInsertMode: ->
     @lineNumberGutterView.classList.toggle('show-absolute-insert-mode', @showAbsoluteNumbersInInsertMode)
+
+  _updateDebounce: ->
+    if @debounceMotion
+      @debouncedUpdate = debounce(@_handleUpdate, @debounceMotion, maxWait: @debounceMotion)
+    else
+      @debouncedUpdate = @_handleUpdate
 
   # Undo changes to DOM
   _undo: () =>
