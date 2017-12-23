@@ -4,10 +4,10 @@ LineNumberView = require './line-number-view'
 module.exports =
   # Config schema
   config:
-    delayedMotion:
-      type: 'boolean'
-      default: false
-      description: 'Delay the motion to reduce the CPU load.'
+    debounceMotion:
+      type: 'integer'
+      default: 0
+      description: 'Debounce line number updates to reduce the CPU load (in milliseconds; 0 to update instantly)'
     trueNumberCurrentLine:
       type: 'boolean'
       default: true
