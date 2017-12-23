@@ -1,10 +1,12 @@
 {CompositeDisposable} = require 'atom'
+_  = require 'lodash'
 
 module.exports =
 class LineNumberView
   constructor: (@editor) ->
     @subscriptions = new CompositeDisposable()
     @editorView = atom.views.getView(@editor)
+    @delayedMotion = atom.config.get('relative-numbers.delayedMotion')
     @trueNumberCurrentLine = atom.config.get('relative-numbers.trueNumberCurrentLine')
     @showAbsoluteNumbers = atom.config.get('relative-numbers.showAbsoluteNumbers')
     @startAtOne = atom.config.get('relative-numbers.startAtOne')
@@ -16,6 +18,9 @@ class LineNumberView
     @gutter = @editor.addGutter
       name: 'relative-numbers'
     @gutter.view = this
+
+    if @delayedMotion
+      @_update = _.debounce(@_update, 200)
 
     try
       # Preferred: Subscribe to any editor model changes
