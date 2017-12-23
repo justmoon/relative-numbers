@@ -1,7 +1,7 @@
 {
   "name": "relative-numbers",
   "main": "./lib/relative-numbers",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Relative line numbers for Atom",
   "repository": "git@github.com:justmoon/relative-numbers.git",
   "license": "MIT",
