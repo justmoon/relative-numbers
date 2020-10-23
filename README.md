@@ -15,8 +15,7 @@ In [vim-mode](https://github.com/atom/vim-mode)'s insert mode, line numbers will
 To change the color for the currently highlighted line, put the following in your stylesheet.
 
 ``` less
-atom-text-editor.editor .relative.current-line {
+atom-text-editor.editor .line-numbers .relative.current-line {
   color: purple
 }
 ```
-
